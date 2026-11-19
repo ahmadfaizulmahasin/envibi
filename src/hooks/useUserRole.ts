@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../services/supabase/client';
+import { supabase } from '../services/supabase/client';
 
 /**
  * Hook to fetch the current user's role from the `public.user_roles` table.
