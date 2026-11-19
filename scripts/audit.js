@@ -53,10 +53,11 @@ async function audit() {
     .single();
   if (userErr && userErr.code === 'PGRST116') {
     // No profile; try sign‑up via auth.
-    const { user: newUser, error: signErr } = await supabase.auth.signUp({
+    const { data: authData, error: signErr } = await supabase.auth.signUp({
       email: dummyEmail,
       password: 'Password123!'
     });
+    const newUser = authData?.user;
     if (signErr) {
       console.error('Failed to create test user:', signErr.message);
     } else {
