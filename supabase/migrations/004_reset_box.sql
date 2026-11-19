@@ -17,3 +17,4 @@ $$;
 
 -- Grant execute privilege to anon and authenticated roles
 GRANT EXECUTE ON FUNCTION reset_box(uuid) TO anon, authenticated;
+
