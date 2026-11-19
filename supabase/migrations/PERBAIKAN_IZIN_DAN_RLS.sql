@@ -108,3 +108,4 @@ CREATE POLICY "Admin can view all roles"
       WHERE user_roles.user_id = auth.uid() AND user_roles.role IN ('ADMIN', 'SUPER_ADMIN')
     )
   );
+
