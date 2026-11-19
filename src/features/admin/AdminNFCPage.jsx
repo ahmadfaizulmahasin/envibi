@@ -129,20 +129,25 @@ export default function AdminNFCPage() {
       ndef_url: writeResult.url,
     })
 
+    if (tagErr) {
+      setOpState('error')
+      setErrorMsg('Gagal menyimpan tag ke database: ' + (tagErr.message || JSON.stringify(tagErr)))
+      return
+    }
+
     // Update box status to READY_TO_SHIP
-    await supabase
+    const { error: boxErr } = await supabase
       .from('savings_boxes')
       .update({ status: 'READY_TO_SHIP' })
       .eq('id', selectedBoxId)
 
-    if (tagErr) {
-      setOpState('error')
-      setErrorMsg('Gagal menyimpan tag ke database: ' + tagErr.message)
-    } else {
-      setOpState('success')
-      setSuccessMsg(`Tag NFC berhasil ditulis dan diverifikasi! Kotak siap dikirim.`)
-      loadData()
+    if (boxErr) {
+      console.warn('Gagal update status kotak:', boxErr)
     }
+
+    setOpState('success')
+    setSuccessMsg(`Tag NFC berhasil ditulis dan diverifikasi! Kotak siap dikirim.`)
+    loadData()
   }
 
   // Handle Read Tag Diagnostic
