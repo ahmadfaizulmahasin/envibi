@@ -1,27 +1,26 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUserRole } from '../hooks/useUserRole';
+import { useAuth } from '../app/providers/AuthProvider';
 
 /**
- * RequireAdmin component – renders children only if the logged‑in user has role "ADMIN".
- * If no user or role is not ADMIN, redirects to home (or a 403 page).
+ * RequireAdmin component – renders children only if logged-in user is ADMIN or SUPER_ADMIN.
  */
 const RequireAdmin = ({ children }) => {
-  const role = useUserRole();
+  const { isAdmin, loading } = useAuth();
 
-  // While role is loading we can show nothing or a spinner.
-  if (role === null) {
-    return null; // or a loading indicator
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <div className="loading-spinner" />
+      </div>
+    );
   }
 
-  // If the user is not admin, redirect.
-  if (role !== 'ADMIN') {
-    return <Navigate to="/" replace />;
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
   }
 
-  // Admin – render the protected content.
   return <>{children}</>;
 };
 
 export default RequireAdmin;
-
